@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler (x64) Version 14.41.34120.0   10/02/24 16:12:47
+Microsoft (R) Macro Assembler (x64) Version 14.41.34120.0   10/03/24 02:56:59
 Asm_Tools.asm						     Page 1 - 1
 
 
@@ -414,7 +414,7 @@ Asm_Tools.asm						     Page 1 - 1
  0000018F  66| 41/ 8B 00			mov ax, [ r8 ]		; AL - очередной символ из строки 
 
  00000193  66| 83 F8 00				cmp ax, 0			; Сравнение байта если равно 0 то флаг je
- 00000197  74 13				je _fill_spaces		; jump equals
+ 00000197  74 10				je _fill_spaces		; jump equals
 
  00000199  49/ 83 C0 02				add r8, 2			; Переводим указатель на следущий символ
 
@@ -422,34 +422,31 @@ Asm_Tools.asm						     Page 1 - 1
 
  0000019E  49/ FF C9				dec r9
  000001A1  49/ 83 F9 00				cmp r9, 0
+ 000001A5  74 0B				je _exit			; Прекращаем вывод, если строка достигла предела
 
- 000001A5  48/ FF C3				inc rbx				; Прибавляем счетчикк длины слова
- 000001A8  74 0B				je _exit			; Прекращаем вывод, если строка достигла предела
-
- 000001AA  EB E3			jmp _main_loop
+ 000001A7  EB E6			jmp _main_loop
 					 
- 000001AC				_fill_spaces:
- 000001AC  66| B8 0020				mov ax, 020h		; Заполняем пробелами
- 000001B0  49/ 8B C9				mov rcx, r9			; Кол-во оставшиехся пробелов
+ 000001A9				_fill_spaces:
+ 000001A9  66| B8 0020				mov ax, 020h		; Заполняем пробелами
+ 000001AD  49/ 8B C9				mov rcx, r9			; Кол-во оставшиехся пробелов
 
- 000001B3  F3/ AB				rep stosd
+ 000001B0  F3/ AB				rep stosd
 
- 000001B5			_exit:
- 000001B5  48/ 8B C3			mov rax, rbx
+ 000001B2			_exit:
 
- 000001B8  41/ 59			pop r9
- 000001BA  41/ 58			pop r8
- 000001BC  5F				pop rdi
- 000001BD  59				pop rcx
- 000001BE  58				pop rax
+ 000001B2  41/ 59			pop r9
+ 000001B4  41/ 58			pop r8
+ 000001B6  5F				pop rdi
+ 000001B7  59				pop rcx
+ 000001B8  58				pop rax
 
- 000001BF  C3				ret
+ 000001B9  C3				ret
 
- 000001C0			Draw_Limited_Text endp
+ 000001BA			Draw_Limited_Text endp
 				;#endregion
 				;-------------------------------------------------------------------------------------------------------------
 				end
-Microsoft (R) Macro Assembler (x64) Version 14.41.34120.0   10/02/24 16:12:47
+Microsoft (R) Macro Assembler (x64) Version 14.41.34120.0   10/03/24 02:56:59
 Asm_Tools.asm						     Symbols 2 - 1
 
 
@@ -462,10 +459,10 @@ Procedures, parameters, and locals:
 Clear_Area . . . . . . . . . . .	P 	 00000111 _TEXT	Length= 00000039 Public
   _loop_fill . . . . . . . . . .	L 	 00000133 _TEXT	
 Draw_End_Symbol  . . . . . . . .	P 	 00000044 _TEXT	Length= 00000013 Public
-Draw_Limited_Text  . . . . . . .	P 	 00000179 _TEXT	Length= 00000047 Public
+Draw_Limited_Text  . . . . . . .	P 	 00000179 _TEXT	Length= 00000041 Public
   _main_loop . . . . . . . . . .	L 	 0000018F _TEXT	
-  _fill_spaces . . . . . . . . .	L 	 000001AC _TEXT	
-  _exit  . . . . . . . . . . . .	L 	 000001B5 _TEXT	
+  _fill_spaces . . . . . . . . .	L 	 000001A9 _TEXT	
+  _exit  . . . . . . . . . . . .	L 	 000001B2 _TEXT	
 Draw_Line_Horizontal . . . . . .	P 	 00000067 _TEXT	Length= 00000024 Public
 Draw_Line_Vertical . . . . . . .	P 	 0000008B _TEXT	Length= 0000003F Public
   _vertical  . . . . . . . . . .	L 	 000000B9 _TEXT	
