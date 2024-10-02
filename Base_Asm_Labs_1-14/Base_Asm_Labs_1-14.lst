@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler (x64) Version 14.41.34120.0   10/02/24 10:02:39
+Microsoft (R) Macro Assembler (x64) Version 14.41.34120.0   10/02/24 16:12:47
 Asm_Tools.asm						     Page 1 - 1
 
 
@@ -339,8 +339,117 @@ Asm_Tools.asm						     Page 1 - 1
  0000014A			Clear_Area endp
 				;#endregion
 				;-------------------------------------------------------------------------------------------------------------
+				;#region Draw_Limited_Text
+ 0000014A			Draw_Text proc
+				; extern "C" void Draw_Text(CHAR_INFO* screen_buffer, SText_Pos pos, wchar_t *str);
+				; Параметры:
+				; RCX - screen_buffer
+				; RDX - pos
+				; R8 - str
+				; R9 - -
+				; Возврат: RAX - длина стороки str
+
+ 0000014A  53				push rbx
+ 0000014B  57				push rdi
+ 0000014C  41/ 50			push r8
+					
+										; 1. Вычисляем адрес вывода
+ 0000014E  E8 FFFFFEB2			call Get_Pos_Address	; RDI = позиция символа в буфере screen_buffer в позиции pos
+
+ 00000153  48/ 8B C2			mov rax, rdx
+ 00000156  48/ C1 E8 20			shr rax, 32				; Старшая половина EAX = pos.Atribute
+
+ 0000015A  48/ 33 DB			xor rbx, rbx			; RBX = 0 
+
+ 0000015D				_main_loop:
+ 0000015D  66| 41/ 8B 00			mov ax, [ r8 ]		; AL - очередной символ из строки 
+
+ 00000161  66| 83 F8 00				cmp ax, 0			; Сравнение битов если = 0 то флаг je
+ 00000165  74 0A				je _exit			; jump is equals
+
+ 00000167  49/ 83 C0 02				add r8, 2			; Переводим указатель на следущий символ
+
+ 0000016B  AB					stosd
+ 0000016C  48/ FF C3				inc rbx				; Прибавляем счетчикк длины слова
+ 0000016F  EB EC			jmp _main_loop			; Прекращаем вывод, если строка достигла предела
+
+
+ 00000171			_exit:
+ 00000171  48/ 8B C3			mov rax, rbx
+
+ 00000174  41/ 58			pop r8
+ 00000176  5F				pop rdi
+ 00000177  5B				pop rbx
+
+ 00000178  C3				ret
+
+ 00000179			Draw_Text endp
+				;#endregion
+				;-------------------------------------------------------------------------------------------------------------
+				;#region Draw_Limited_Text
+ 00000179			Draw_Limited_Text proc
+				; extern "C" void Draw_Limited_Text(CHAR_INFO* screen_buffer, SText_Pos pos, wchar_t str, unsigned short limit);
+				; Параметры:
+				; RCX - screen_buffer
+				; RDX - pos
+				; R8 - str
+				; R9 - limit
+				; Возврат: RAX - длина стороки str
+
+ 00000179  50				push rax
+ 0000017A  51				push rcx
+ 0000017B  57				push rdi
+ 0000017C  41/ 50			push r8
+ 0000017E  41/ 51			push r9
+					
+										; 1. Вычисляем адрес вывода
+ 00000180  E8 FFFFFE80			call Get_Pos_Address	; RDI = позиция символа в буфере screen_buffer в позиции pos
+
+ 00000185  48/ 8B C2			mov rax, rdx
+ 00000188  48/ C1 E8 20			shr rax, 32				; Старшая половина EAX = pos.Atribute
+
+ 0000018C  48/ 33 DB			xor rbx, rbx			; RBX = 0 
+
+ 0000018F				_main_loop:
+ 0000018F  66| 41/ 8B 00			mov ax, [ r8 ]		; AL - очередной символ из строки 
+
+ 00000193  66| 83 F8 00				cmp ax, 0			; Сравнение байта если равно 0 то флаг je
+ 00000197  74 13				je _fill_spaces		; jump equals
+
+ 00000199  49/ 83 C0 02				add r8, 2			; Переводим указатель на следущий символ
+
+ 0000019D  AB					stosd
+
+ 0000019E  49/ FF C9				dec r9
+ 000001A1  49/ 83 F9 00				cmp r9, 0
+
+ 000001A5  48/ FF C3				inc rbx				; Прибавляем счетчикк длины слова
+ 000001A8  74 0B				je _exit			; Прекращаем вывод, если строка достигла предела
+
+ 000001AA  EB E3			jmp _main_loop
+					 
+ 000001AC				_fill_spaces:
+ 000001AC  66| B8 0020				mov ax, 020h		; Заполняем пробелами
+ 000001B0  49/ 8B C9				mov rcx, r9			; Кол-во оставшиехся пробелов
+
+ 000001B3  F3/ AB				rep stosd
+
+ 000001B5			_exit:
+ 000001B5  48/ 8B C3			mov rax, rbx
+
+ 000001B8  41/ 59			pop r9
+ 000001BA  41/ 58			pop r8
+ 000001BC  5F				pop rdi
+ 000001BD  59				pop rcx
+ 000001BE  58				pop rax
+
+ 000001BF  C3				ret
+
+ 000001C0			Draw_Limited_Text endp
+				;#endregion
+				;-------------------------------------------------------------------------------------------------------------
 				end
-Microsoft (R) Macro Assembler (x64) Version 14.41.34120.0   10/02/24 10:02:39
+Microsoft (R) Macro Assembler (x64) Version 14.41.34120.0   10/02/24 16:12:47
 Asm_Tools.asm						     Symbols 2 - 1
 
 
@@ -353,10 +462,17 @@ Procedures, parameters, and locals:
 Clear_Area . . . . . . . . . . .	P 	 00000111 _TEXT	Length= 00000039 Public
   _loop_fill . . . . . . . . . .	L 	 00000133 _TEXT	
 Draw_End_Symbol  . . . . . . . .	P 	 00000044 _TEXT	Length= 00000013 Public
+Draw_Limited_Text  . . . . . . .	P 	 00000179 _TEXT	Length= 00000047 Public
+  _main_loop . . . . . . . . . .	L 	 0000018F _TEXT	
+  _fill_spaces . . . . . . . . .	L 	 000001AC _TEXT	
+  _exit  . . . . . . . . . . . .	L 	 000001B5 _TEXT	
 Draw_Line_Horizontal . . . . . .	P 	 00000067 _TEXT	Length= 00000024 Public
 Draw_Line_Vertical . . . . . . .	P 	 0000008B _TEXT	Length= 0000003F Public
   _vertical  . . . . . . . . . .	L 	 000000B9 _TEXT	
 Draw_Start_Symbol  . . . . . . .	P 	 00000031 _TEXT	Length= 00000013 Public
+Draw_Text  . . . . . . . . . . .	P 	 0000014A _TEXT	Length= 0000002F Public
+  _main_loop . . . . . . . . . .	L 	 0000015D _TEXT	
+  _exit  . . . . . . . . . . . .	L 	 00000171 _TEXT	
 Get_Pos_Address  . . . . . . . .	P 	 00000005 _TEXT	Length= 0000002C Public
 Get_Screen_Width_Size  . . . . .	P 	 00000057 _TEXT	Length= 00000010 Public
 Make_Sum . . . . . . . . . . . .	P 	 00000000 _TEXT	Length= 00000005 Public

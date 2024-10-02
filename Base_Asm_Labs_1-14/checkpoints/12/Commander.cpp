@@ -127,7 +127,7 @@ void AsCommander::Build_Menu()
     int x_pos = 0;
     int x_step = Screen_Buffer_Info.dwSize.X / 10;
 
-    Add_Next_Menu_Item(index, x_pos, x_step, L"1", L"Help");
+    Add_Next_Menu_Item(index, x_pos, x_step, L"111", L"Help");
     Add_Next_Menu_Item(index, x_pos, x_step, L"2", L"UserMenu");
     Add_Next_Menu_Item(index, x_pos, x_step, L"3", L"View");
     Add_Next_Menu_Item(index, x_pos, x_step, L"4", L"Edit");
