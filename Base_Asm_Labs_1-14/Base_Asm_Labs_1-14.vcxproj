@@ -19,15 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="checkpoints\9\Asm_Tools.asm" />
+    <MASM Include="checkpoints\10\Asm_Tools.asm" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="checkpoints\9\Main.cpp" />
-    <ClCompile Include="checkpoints\9\Panel.cpp" />
+    <ClCompile Include="checkpoints\10\Main.cpp" />
+    <ClCompile Include="checkpoints\10\Panel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="checkpoints\9\Main.h" />
-    <ClInclude Include="checkpoints\9\Panel.h" />
+    <ClInclude Include="checkpoints\10\Main.h" />
+    <ClInclude Include="checkpoints\10\Panel.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
