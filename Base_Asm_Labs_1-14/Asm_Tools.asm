@@ -332,4 +332,113 @@ Clear_Area proc
 Clear_Area endp
 ;#endregion
 ;-------------------------------------------------------------------------------------------------------------
+;#region Draw_Limited_Text
+Draw_Text proc
+; extern "C" void Draw_Text(CHAR_INFO* screen_buffer, SText_Pos pos, wchar_t *str);
+; Параметры:
+; RCX - screen_buffer
+; RDX - pos
+; R8 - str
+; R9 - -
+; Возврат: RAX - длина стороки str
+
+	push rbx
+	push rdi
+	push r8
+	
+						; 1. Вычисляем адрес вывода
+	call Get_Pos_Address	; RDI = позиция символа в буфере screen_buffer в позиции pos
+
+	mov rax, rdx
+	shr rax, 32				; Старшая половина EAX = pos.Atribute
+
+	xor rbx, rbx			; RBX = 0 
+
+	_main_loop:
+		mov ax, [ r8 ]		; AL - очередной символ из строки 
+
+		cmp ax, 0			; Сравнение битов если = 0 то флаг je
+		je _exit			; jump is equals
+
+		add r8, 2			; Переводим указатель на следущий символ
+
+		stosd
+		inc rbx				; Прибавляем счетчикк длины слова
+	jmp _main_loop			; Прекращаем вывод, если строка достигла предела
+
+
+_exit:
+	mov rax, rbx
+
+	pop r8
+	pop rdi
+	pop rbx
+
+	ret
+
+Draw_Text endp
+;#endregion
+;-------------------------------------------------------------------------------------------------------------
+;#region Draw_Limited_Text
+Draw_Limited_Text proc
+; extern "C" void Draw_Limited_Text(CHAR_INFO* screen_buffer, SText_Pos pos, wchar_t str, unsigned short limit);
+; Параметры:
+; RCX - screen_buffer
+; RDX - pos
+; R8 - str
+; R9 - limit
+; Возврат: RAX - длина стороки str
+
+	push rax
+	push rcx
+	push rdi
+	push r8
+	push r9
+	
+						; 1. Вычисляем адрес вывода
+	call Get_Pos_Address	; RDI = позиция символа в буфере screen_buffer в позиции pos
+
+	mov rax, rdx
+	shr rax, 32				; Старшая половина EAX = pos.Atribute
+
+	xor rbx, rbx			; RBX = 0 
+
+	_main_loop:
+		mov ax, [ r8 ]		; AL - очередной символ из строки 
+
+		cmp ax, 0			; Сравнение байта если равно 0 то флаг je
+		je _fill_spaces		; jump equals
+
+		add r8, 2			; Переводим указатель на следущий символ
+
+		stosd
+
+		dec r9
+		cmp r9, 0
+
+		inc rbx				; Прибавляем счетчикк длины слова
+		je _exit			; Прекращаем вывод, если строка достигла предела
+
+	jmp _main_loop
+	 
+	_fill_spaces:
+		mov ax, 020h		; Заполняем пробелами
+		mov rcx, r9			; Кол-во оставшиехся пробелов
+
+		rep stosd
+
+_exit:
+	mov rax, rbx
+
+	pop r9
+	pop r8
+	pop rdi
+	pop rcx
+	pop rax
+
+	ret
+
+Draw_Limited_Text endp
+;#endregion
+;-------------------------------------------------------------------------------------------------------------
 end

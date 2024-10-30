@@ -16,3 +16,9 @@ SPos::SPos(unsigned short x_pos, unsigned short y_pos, unsigned short screen_wid
 //------------------------------------------------------------------------------------------------------------
 SArea_Pos::SArea_Pos(unsigned short x_pos, unsigned short y_pos, unsigned short screen_width, unsigned char width, unsigned char height)
     : X_Pos(x_pos), Y_Pos(y_pos), Screen_Width(screen_width), Width(width), Height(height) {}
+
+
+//SText_Pos
+//------------------------------------------------------------------------------------------------------------
+SText_Pos::SText_Pos(unsigned short x_pos, unsigned short y_pos, unsigned short screen_width, unsigned short attributes)
+    : X_Pos(x_pos), Y_Pos(y_pos), Screen_Width(screen_width), Attributes(attributes) {}
