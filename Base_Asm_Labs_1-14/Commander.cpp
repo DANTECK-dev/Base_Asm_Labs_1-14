@@ -1,5 +1,6 @@
 #include "Commander.h"
 
+
 //AMenu_Item
 //------------------------------------------------------------------------------------------------------------
 AMenu_Item::AMenu_Item(unsigned short x_pos, unsigned short y_pos, unsigned short len, const wchar_t* key, const wchar_t* name)
@@ -10,7 +11,7 @@ void AMenu_Item::Draw(CHAR_INFO* screen_buffer, unsigned short screen_width)
     int key_str_len;
 
     SText_Pos key_pos(X_Pos, Y_Pos, screen_width, 0x04);
-    key_str_len = Draw_Text(screen_buffer, key_pos, Key + ' ');
+    key_str_len = Draw_Text(screen_buffer, key_pos, Key);
 
     SText_Pos name_pos(X_Pos + key_str_len, Y_Pos, screen_width, 0xc0);
     Draw_Limited_Text(screen_buffer, name_pos, Name, Len);
@@ -77,6 +78,9 @@ bool AsCommander::Init()
 
     Build_Menu();
 
+    Left_Panel->Get_Directory_Files();
+    Right_Panel->Get_Directory_Files();
+
     return true;
 }
 
@@ -127,7 +131,7 @@ void AsCommander::Build_Menu()
     int x_pos = 0;
     int x_step = Screen_Buffer_Info.dwSize.X / 10;
 
-    Add_Next_Menu_Item(index, x_pos, x_step, L"111", L"Help");
+    Add_Next_Menu_Item(index, x_pos, x_step, L"1", L"Help");
     Add_Next_Menu_Item(index, x_pos, x_step, L"2", L"UserMenu");
     Add_Next_Menu_Item(index, x_pos, x_step, L"3", L"View");
     Add_Next_Menu_Item(index, x_pos, x_step, L"4", L"Edit");

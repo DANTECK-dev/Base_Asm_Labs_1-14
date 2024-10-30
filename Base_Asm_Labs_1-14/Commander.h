@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Panel.h"
+#include <stdio.h>
 
 
 // AMenu_Item
@@ -18,6 +19,7 @@ public:
 	const wchar_t* Key, * Name;
 };
 
+//AsCommander
 //------------------------------------------------------------------------------------------------------------
 class AsCommander
 {
