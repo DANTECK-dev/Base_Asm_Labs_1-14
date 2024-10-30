@@ -7,16 +7,12 @@
 //------------------------------------------------------------------------------------------------------------
 int main(void)
 {
-    AsCommander commander;
+    AsCommander Commander;
 
-    if (!commander.Init())
+    if (!Commander.Init())
         return -1;
 
-    if (!commander.Draw())
-        return -1;
-
-
-
+    Commander.Run();
 
     return 0;
 }

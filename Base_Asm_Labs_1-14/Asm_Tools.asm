@@ -415,8 +415,6 @@ Draw_Limited_Text proc
 
 		dec r9
 		cmp r9, 0
-
-		inc rbx				; Прибавляем счетчикк длины слова
 		je _exit			; Прекращаем вывод, если строка достигла предела
 
 	jmp _main_loop
@@ -428,7 +426,6 @@ Draw_Limited_Text proc
 		rep stosd
 
 _exit:
-	mov rax, rbx
 
 	pop r9
 	pop r8
