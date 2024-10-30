@@ -30,39 +30,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="Panel.cpp">
-      <Filter>Panel</Filter>
-    </ClCompile>
-    <ClCompile Include="Commander.cpp">
-      <Filter>Commander</Filter>
-    </ClCompile>
-    <ClCompile Include="Asm_Tools_Interface.h">
-      <Filter>Asm_Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Common.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Main.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="Panel.h">
-      <Filter>Panel</Filter>
-    </ClInclude>
-    <ClInclude Include="Commander.h">
-      <Filter>Commander</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="Asm_Tools.asm">
-      <Filter>Asm_Tools</Filter>
+    <MASM Include="checkpoints\9\Asm_Tools.asm">
+      <Filter>Source Files</Filter>
     </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="checkpoints\9\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="checkpoints\9\Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="checkpoints\9\Main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="checkpoints\9\Panel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
