@@ -103,6 +103,22 @@ Draw_End_Symbol proc
 Draw_End_Symbol endp
 ;#endregion
 ;-------------------------------------------------------------------------------------------------------------
+;#region Get_Screen_Width_Size
+Get_Screen_Width_Size proc
+; Вычисление ширину экрана в байтах
+; RDX - Spos pos или SArea_Pos area_pos
+; Возврата: R11 = pos.Screen_Width * 4
+
+	mov r11, rdx
+	shr r11, 32				; R11 = Pos
+	movzx r11, r11w			; R11 = R11W = pos.Screen_Width
+	shl r11, 2				; умножаем на 4 R11 * 4
+
+	ret
+
+Get_Screen_Width_Size endp
+;#endregion
+;-------------------------------------------------------------------------------------------------------------
 ;#region Draw_Line_Horizontal
 Draw_Line_Horizontal proc
 ; extern "C" void Draw_Line_Horizontal(CHAR_INFO *screen_buffer, SPos pos,  ASymbol symbol);
@@ -213,40 +229,39 @@ Show_Colors proc
 	push r10
 	push r11
 
-						; 1. Вычисляем адрес вывода
-	call Get_Pos_Address	; RDI = позиция символа в буфере screen_buffer в позиции pos
+								; 1. Вычисляем адрес вывода
+	call Get_Pos_Address			; RDI = позиция символа в буфере screen_buffer в позиции pos
+									
 	
-	mov r10, rdi			; Сохраняем копию адреса
+	mov r10, rdi					; Сохраняем копию адреса
 
-						; 2. Вычисление коррекции позиции вывода
-	mov r11, rdx
-	shr r11, 32				; R11 = Pos
-	movzx r11, r11w			; R11 = R11W = pos.Screen_Width
-	shl r11, 2				; умножаем на 4 R11 * 4
+						
+	call Get_Screen_Width_Size	; 2. Вычисление коррекции позиции вывода
+									; R11 = pos.Screen_Width * 4 = Ширина экрана в байтах
 	
-						; 3. Готовим циклы
-	mov rax, r8				; RAX = EAX = symbol
+								; 3. Готовим циклы
+	mov rax, r8						; RAX = EAX = symbol
 
-	and rax, 0ffffh			; обнуляем левые 6 байфт RAX
-							; значение чисел начинаются с цифры = 0 00 00 00 00 00 00 ff ff ff
+	and rax, 0ffffh					; обнуляем левые 6 байфт RAX
+									; значение чисел начинаются с цифры = 0 00 00 00 00 00 00 ff ff ff
 
-	mov rbx, 16				; внешний счетчик
-	; mov rcx, 0			; медленное обнуление
-	xor rcx, rcx			; RCX = 0 быстрое обнуление
+	mov rbx, 16						; внешний счетчик
+	; mov rcx, 0					; медленное обнуление
+	xor rcx, rcx					; RCX = 0 быстрое обнуление
 	_external_rainbow:
 
-		mov rcx, 16			; внутрений счетчик
+		mov cl, 16					; внутрений счетчик
 		_internal_rainbow:
 
 			stosd
-			add rax, 010000h	; Шаг атрибута на 16 разрядов, для изменения цвета
+			add rax, 010000h		; Шаг атрибута на 16 разрядов, для изменения цвета
 
 		loop _internal_rainbow
 
-	add r10, r11
-	mov rdi, r10
+		add r10, r11
+		mov rdi, r10
 
-	dec rbx
+		dec rbx
 	jnz _external_rainbow
 
 	pop r11
@@ -259,6 +274,62 @@ Show_Colors proc
 	ret
 
 Show_Colors endp
+;#endregion
+;-------------------------------------------------------------------------------------------------------------
+;#region Clear_Area
+Clear_Area proc
+; extern "C" void Clear_Area(CHAR_INFO* screen_buffer, SArea_Pos area_pos, ASymbol symbol);
+; Параметры:
+; RCX - screen_buffer
+; RDX - area_pos
+; R8 - symbol
+; R9 - -
+; Возврат: None
+
+	push rax
+	push rbx
+	push rcx
+	push rdi
+	push r10
+	push r11
+
+						; 1. Вычисляем адрес вывода
+	call Get_Pos_Address	; RDI = позиция символа в буфере screen_buffer в позиции pos
+	
+	mov r10, rdi			; Сохраняем копию адреса
+
+	call Get_Screen_Width_Size	; 2. Вычисление коррекции позиции вывода
+									; R11 = pos.Screen_Width * 4 = Ширина экрана в байтах
+	
+						; 3. Готовим циклы
+	mov rax, r8			; RAX = R8D = symbol
+
+	mov rbx, rdx
+	shr rbx, 48				; BH = area_pos.Height, BL = area_pos.Width
+
+	; mov rcx, 0			; медленное обнуление
+	xor rcx, rcx			; RCX = 0 быстрое обнуление
+	_loop_fill:
+
+		mov cl, bl			; внутрений счетчик
+		rep stosd
+
+		add r10, r11
+		mov rdi, r10
+
+		dec bh
+	jnz _loop_fill
+
+	pop r11
+	pop r10
+	pop rdi
+	pop rcx
+	pop rbx
+	pop rax
+
+	ret
+
+Clear_Area endp
 ;#endregion
 ;-------------------------------------------------------------------------------------------------------------
 end

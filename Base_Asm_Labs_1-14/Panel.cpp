@@ -1,77 +1,64 @@
-#include "Panel.h"
+п»ї#include "Panel.h"
 
-// ASymbol
-//------------------------------------------------------------------------------------------------------------
-ASymbol::ASymbol(wchar_t main_symbol, unsigned short attributes, wchar_t start_symbol, wchar_t end_symbol)
-    : Main_Symbol(main_symbol), Attributes(attributes), Start_Symbol(start_symbol), End_Symbol(end_symbol) {}
 
-// SPos
-//------------------------------------------------------------------------------------------------------------
-SPos::SPos(unsigned short x_pos, unsigned short y_pos, unsigned short screen_width, unsigned short len)
-    : X_Pos(x_pos), Y_Pos(y_pos), Screen_Width(screen_width), Len(len) {}
+
 
 // APanel
 //------------------------------------------------------------------------------------------------------------
 APanel::APanel(unsigned short x_pos, unsigned short y_pos, unsigned short width, unsigned short height, CHAR_INFO* screen_buffer, unsigned short screen_width)
-    : X_Pos(x_pos), Y_Pos(y_pos), Width(width), Height(height), Screen_Buffer(screen_buffer), Screen_Width(screen_width)
-{
-
-}
+    : X_Pos(x_pos), Y_Pos(y_pos), Width(width), Height(height), Screen_Buffer(screen_buffer), Screen_Width(screen_width) {}
 
 void APanel::Draw()
 {
+    ASymbol symbol(L' ', 0xc0, L' ', L' ');
+    SArea_Pos area_pos(X_Pos + 1, Y_Pos + 1, Screen_Width, Width - 2, Height - 2);
+    Clear_Area(Screen_Buffer, area_pos, symbol);
 
-    //ASymbol vert_symbol(L'?', 0xc0, L'?', L'?');
-    //vert_symbol.Char.UnicodeChar = L'?';
-    //vert_symbol.Attributes = 0xc0;
-
-    //SPos vert_pos(0, 1, Screen_Width, Height - 2);
-
-    // 1.   Горизонтальные линии
-    // 1.1. Верхние линии
+    // 1.   Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅС‹Рµ Р»РёРЅРёРё
+    // 1.1. Р’РµСЂС…РЅРёРµ Р»РёРЅРёРё
     {
-        ASymbol symbol(L'?', 0xc0, L'?', L'?');
-        SPos position(1, 0, Screen_Width, Width - 2);
+        ASymbol symbol(L'в•ђ', 0xc0, L'в•”', L'в•—');
+        SPos position(X_Pos, Y_Pos, Screen_Width, Width - 2);
         Draw_Line_Horizontal(Screen_Buffer, position, symbol);
     }
 
-    // 1.2. Нижняя линия
+    // 1.2. РќРёР¶РЅСЏСЏ Р»РёРЅРёСЏ
     {
-        ASymbol symbol(L'?', 0xc0, L'?', L'?');
-        SPos position(1, Height - 1, Screen_Width, Width - 2);
+        ASymbol symbol(L'в•ђ', 0xc0, L'в•љ', L'в•ќ');
+        SPos position(X_Pos, Y_Pos + Height - 1, Screen_Width, Width - 2);
         Draw_Line_Horizontal(Screen_Buffer, position, symbol);
     }
 
-    // 2.   Вертикальная линия
-    // 2.1. Левая линия
+    // 2.   Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ Р»РёРЅРёСЏ
+    // 2.1. Р›РµРІР°СЏ Р»РёРЅРёСЏ
     {
-        ASymbol symbol(L'?', 0xc0, L'?', L'?');
-        SPos position(1, 1, Screen_Width, Height - 4);
+        ASymbol symbol(L'в•‘', 0xc0, L'в•‘', L'в•‘');
+        SPos position(X_Pos, Y_Pos + 1, Screen_Width, Height - 4);
         Draw_Line_Vertical(Screen_Buffer, position, symbol);
     }
 
-    // 2.2. Правая линия
+    // 2.2. РџСЂР°РІР°СЏ Р»РёРЅРёСЏ
     {
-        ASymbol symbol(L'?', 0xc0, L'?', L'?');
-        SPos position(Width, 1, Screen_Width, Height - 4);
+        ASymbol symbol(L'в•‘', 0xc0, L'в•‘', L'в•‘');
+        SPos position(X_Pos + Width - 1, Y_Pos + 1, Screen_Width, Height - 4);
         Draw_Line_Vertical(Screen_Buffer, position, symbol);
     }
 
-    // 3. Средняя горизонтальные линия
+    // 3. РЎСЂРµРґРЅСЏСЏ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅС‹Рµ Р»РёРЅРёСЏ
     {
-        ASymbol symbol(L'?', 0xc0, L'?', L'?');
-        SPos position(1, Height - 3, Screen_Width, Width - 2);
+        ASymbol symbol(L'в”Ђ', 0xc0, L'в•џ', L'в•ў');
+        SPos position(X_Pos, Y_Pos + Height - 3, Screen_Width, Width - 2);
         Draw_Line_Horizontal(Screen_Buffer, position, symbol);
     }
 
-    // 4. Средняя вертикальная линия
+    // 4. РЎСЂРµРґРЅСЏСЏ РІРµСЂС‚РёРєР°Р»СЊРЅР°СЏ Р»РёРЅРёСЏ
     {
-        ASymbol symbol(L'?', 0xc0, L'?', L'?');
-        SPos position(Width / 2, 0, Screen_Width, Height - 4);
+        ASymbol symbol(L'в•‘', 0xc0, L'в•¦', L'в•Ё');
+        SPos position(X_Pos + (Width / 2), Y_Pos, Screen_Width, Height - 4);
         Draw_Line_Vertical(Screen_Buffer, position, symbol);
     }
 
-    //symbol.Char.UnicodeChar = L'?';
+    //symbol.Char.UnicodeChar = L'в”Ђ';
     //pos.Y_Pos = Height - 3;
     //Draw_Line_Horizontal(Screen_Buffer, pos, symbol);
     //
