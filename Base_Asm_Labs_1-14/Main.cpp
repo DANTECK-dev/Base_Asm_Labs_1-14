@@ -53,8 +53,7 @@ int main(void)
     APanel left_panel(0, 0, half_width, screen_buffer_info.dwSize.Y - 2, screen_buffer, screen_buffer_info.dwSize.X);
     APanel right_panel(half_width, 0, half_width, screen_buffer_info.dwSize.Y - 2, screen_buffer, screen_buffer_info.dwSize.X);
 
-    left_panel.Draw();
-    //right_panel.Draw();
+    
 
     if (! WriteConsoleOutput(screen_buffer_handle, screen_buffer, screen_buffer_info.dwSize, screen_buffer_pos, &screen_buffer_info.srWindow) )
     {

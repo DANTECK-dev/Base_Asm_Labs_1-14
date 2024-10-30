@@ -30,23 +30,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="checkpoints\10\Asm_Tools.asm">
+    <MASM Include="Asm_Tools.asm">
       <Filter>Source Files</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="checkpoints\10\Main.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="checkpoints\10\Panel.cpp">
+    <ClCompile Include="Panel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="checkpoints\10\Main.h">
+    <ClInclude Include="Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="checkpoints\10\Panel.h">
+    <ClInclude Include="Panel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
