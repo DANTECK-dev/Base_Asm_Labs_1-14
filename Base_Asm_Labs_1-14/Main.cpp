@@ -7,7 +7,7 @@ int main(void)
     HANDLE std_handle, screen_buffer_handle;
     SMALL_RECT srctWriteRect;
     CONSOLE_SCREEN_BUFFER_INFO screen_buffer_info{};
-    CHAR_INFO *screen_buffer;
+    CHAR_INFO* screen_buffer;
     COORD screen_buffer_pos{};
     int screen_buffer_size;
 
@@ -21,13 +21,13 @@ int main(void)
     }
 
     // Make the new screen buffer the active screen buffer.
-    if (! SetConsoleActiveScreenBuffer(screen_buffer_handle) )
+    if (!SetConsoleActiveScreenBuffer(screen_buffer_handle))
     {
         printf("SetConsoleActiveScreenBuffer failed - (%d)\n", GetLastError());
         return 1;
     }
 
-    if (! GetConsoleScreenBufferInfo(screen_buffer_handle, &screen_buffer_info) )
+    if (!GetConsoleScreenBufferInfo(screen_buffer_handle, &screen_buffer_info))
     {
         printf("GetConsoleScreenBufferInfo failed - (%d)\n", GetLastError());
         return 1;
@@ -53,19 +53,20 @@ int main(void)
     APanel left_panel(0, 0, half_width, screen_buffer_info.dwSize.Y - 2, screen_buffer, screen_buffer_info.dwSize.X);
     APanel right_panel(half_width, 0, half_width, screen_buffer_info.dwSize.Y - 2, screen_buffer, screen_buffer_info.dwSize.X);
 
-    
+    left_panel.Draw();
+    //right_panel.Draw();
 
-    if (! WriteConsoleOutput(screen_buffer_handle, screen_buffer, screen_buffer_info.dwSize, screen_buffer_pos, &screen_buffer_info.srWindow) )
+    if (!WriteConsoleOutput(screen_buffer_handle, screen_buffer, screen_buffer_info.dwSize, screen_buffer_pos, &screen_buffer_info.srWindow))
     {
         printf("WriteConsoleOutput failed - (%d)\n", GetLastError());
         return 1;
     }
 
-    Sleep(150*1000);
+    Sleep(150 * 1000);
 
     // Restore the original active screen buffer.
 
-    if (! SetConsoleActiveScreenBuffer(std_handle))
+    if (!SetConsoleActiveScreenBuffer(std_handle))
     {
         printf("SetConsoleActiveScreenBuffer failed - (%d)\n", GetLastError());
         return 1;
